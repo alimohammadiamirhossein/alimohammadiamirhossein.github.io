@@ -4,7 +4,7 @@ layout: page
 
 <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="flex: 1; padding-right: 20px;">
-            <img src="images/Amirhossein.jpg" alt="Your Image" style="width: 30%; height: auto; display: block;">
+            <img src="images/Amirhossein.jpg" alt="Your Image" style="width: 80%; height: auto; display: block;">
             <br>
             <p style="margin-left: 3%"><a href="/files/cv.pdf">CV</a>  /  <a href="mailto:amirhossein_alimohammadi@sfu.ca">Email</a>  /  <a href="https://scholar.google.com/">Scholar</a>  /  <a href="https://github.com/alimohammadiamirhossein">Github</a>  /  <a href="https://twitter.com/">Twitter</a></p> 
         </div>
