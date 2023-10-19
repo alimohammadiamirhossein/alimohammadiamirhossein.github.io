@@ -6,7 +6,7 @@ layout: page
         <div style="flex: 1; padding-right: 20px;">
             <img src="images/Amirhossein.jpg" alt="Your Image" style="width: 80%; height: auto; display: block;">
             <br>
-            <p style="margin-left: 3%"><a href="/files/cv.pdf">CV</a>  /  <a href="mailto:amirhossein_alimohammadi@sfu.ca">Email</a>  /  <a href="https://scholar.google.com/">Scholar</a>  /  <a href="https://github.com/alimohammadiamirhossein">Github</a>  /  <a href="https://twitter.com/amirhossein_alm">Twitter</a></p> 
+            <p style="margin-left: 3%"><a href="/files/CV.pdf">CV</a>  /  <a href="mailto:amirhossein_alimohammadi@sfu.ca">Email</a>  /  <a href="https://scholar.google.com/">Scholar</a>  /  <a href="https://github.com/alimohammadiamirhossein">Github</a>  /  <a href="https://twitter.com/amirhossein_alm">Twitter</a></p> 
         </div>
         <div style="flex: 1; padding-left: 0px; padding-right: 10px">
         <p style="text-align: justify;">I am a Master student at Simon Fraser University co-advised by <a href="https://www.sfu.ca/computing/people/faculty/ali-mahdavi-amiri.html" target="_blank" rel="noopener noreferrer"> Ali Mahdavi-Amiri </a> and <a href="https://asgsaeid.github.io/" target="_blank" rel="noopener noreferrer">Saeid Asgari</a>. I am currently focused on generative models and how we can improve their performance. More broadly, I am interested in 3D Computer Vision and Graphics.</p>
