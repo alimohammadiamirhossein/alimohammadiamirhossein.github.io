@@ -4,30 +4,13 @@ layout: page
 
 <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="flex: 1; padding-right: 20px;">
-            <img src="images/your_image.jpg" alt="Your Image" style="max-width: 80%;  display: block;">
+            <img src="images/Amirhossein.jpg" alt="Your Image" style="width: 30%; height: auto; display: block;">
             <br>
-            <p style="margin-left: 3%"><a href="/files/your_cv.pdf">CV</a>  /  <a href="mailto:your_email@example.com">Email</a>  /  <a href="https://your-scholar-page-url.com">Scholar</a>  /  <a href="https://your-github-url.com">Github</a>  /  <a href="https://your-twitter-url.com">Twitter</a></p> 
+            <p style="margin-left: 3%"><a href="/files/cv.pdf">CV</a>  /  <a href="mailto:amirhossein_alimohammadi@sfu.ca">Email</a>  /  <a href="https://scholar.google.com/">Scholar</a>  /  <a href="https://github.com/alimohammadiamirhossein">Github</a>  /  <a href="https://twitter.com/">Twitter</a></p> 
         </div>
         <div style="flex: 1; padding-left: 0px; padding-right: 10px">
-            <p style="text-align: justify;">Replace this text with your introduction.</p>
-            <p style="text-align: justify;">Add information about your background, education, and experiences here.</p>
+        <p style="text-align: justify;">I am a Master student at Simon Fraser University co-advised by <a href="https://www.sfu.ca/computing/people/faculty/ali-mahdavi-amiri.html" target="_blank" rel="noopener noreferrer"> Ali Mahdavi-Amiri </a> and <a href="https://asgsaeid.github.io/" target="_blank" rel="noopener noreferrer">Saeid Asgari</a>. I am currently focused on generative models and how we can improve their performance. More broadly, I am interested in 3D Computer Vision and Graphics.</p>
+        <p style="text-align: justify;">Previously, I completed my B.Sc. in Sharif University of Technology. I was fortunate to have two wonderful internships at <a href="https://www.epfl.ch/labs/vita/" target="_blank" rel="noopener noreferrer">VITA lab</a> working with <a href="https://people.epfl.ch/alexandre.alahi?lang=en" target="_blank" rel="noopener noreferrer">Alexandre Alahi</a>, and at <a href="https://en.sharif.edu/" target="_blank" rel="noopener noreferrer">Sharif University</a> working with <a href="https://www.ocf.berkeley.edu/~asgari/" target="_blank" rel="noopener noreferrer">Ehsaneddin Asgari</a>.</p>
         </div>
 </div>
 <hr style="margin-top: 20px; margin-bottom: 20px;">
-<div>
-        <h2 style="color: #424242; font-size: 27px; font-family: Helvetica-light, serif;">Publications</h2>
-        <!-- You can add or modify the content for each publication section as needed -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div style="flex: 1; padding: 20px;">
-                <img src="/images/your_publication_image_1.jpg" alt="Publication Image 1" style="max-width: 70%;  display: block;">
-                <!-- Add links and descriptions for your publications -->
-                <p style="margin-left: 14%"> <a href="https://your-publication-page.com" target="_blank" rel="noopener noreferrer">Page</a> / <a href="https://your-publication-arxiv-link.com" target="_blank" rel="noopener noreferrer">Arxiv</a> / <a href="https://your-publication-code-link.com" target="_blank" rel="noopener noreferrer">Code</a></p>
-            </div>
-            <div style="flex: 1; padding: 20px;">
-                <p> <b>Your Publication Title 1</b> </p>
-                <p> Your Name, Co-Authors' Names </p>
-                <p><i>Your Publication Details</i></p>
-            </div>
-        </div>
-        <!-- Add more publication sections as needed -->
-    </div>
