@@ -1,0 +1,13 @@
+# Site settings
+title: Your Name  # Your name or the title for your website
+description: >-  # A brief description of your website
+  Your description here.
+
+url: "your-website-url.com"  # Your website URL
+twitter_username: your_twitter_handle  # Your Twitter username
+github_username: your_github_username  # Your GitHub username
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
