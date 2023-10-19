@@ -1,11 +1,11 @@
 # Site settings
-title: Your Name  # Your name or the title for your website
+title: Amirhossein Alimohammadi  # Your name or the title for your website
 description: >-  # A brief description of your website
-  Your description here.
+  Amir's personal webpage.
 
-url: "your-website-url.com"  # Your website URL
-twitter_username: your_twitter_handle  # Your Twitter username
-github_username: your_github_username  # Your GitHub username
+url: "alimohammadiamirhossein.github.io"  # Your website URL
+twitter_username: amirhossein_alm  # Your Twitter username
+github_username: alimohammadiamirhossein  # Your GitHub username
 
 # Build settings
 theme: minima
