@@ -1,7 +1,6 @@
 ### my personal website
 
-a website that shows cv in a tree-like structure
-which is really intuitive.
+a website that shows cv in a tree-like structure.
 
 ![img.png](static/screenshot.png)
 
