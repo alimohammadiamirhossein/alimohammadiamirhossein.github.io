@@ -77,6 +77,19 @@ const imcNode = addItem({
     picture: "/static/images/imc.png"
 }, highSchoolNode);
 
+const sharifNode = addItem({
+    description: "Sharif University of Technology (Tehran, Iran)<br>" +
+        "B.Sc. Computer Engineering, 2018-2023<br>" +
+        "GPA - 18.09/20",
+    picture: "/static/images/sharif.jpg"
+}, rootItem);
+
+const thesisNode = addItem({
+    description: "Bachelor Thesis: <a href=\"/static/CV.pdf\">CryptoPredictions</a></br>" +
+        "Implemented an open-source library for predicting and forecasting cryptocurrency prices.<br/>" +
+        "The library includes 9 models, 10 metrics, and over 30 indicators, and supports more than 15 popular cryptocurrencies.",
+    picture: "/static/images/thesis.png"
+}, sharifNode);
 
 // Social Node section
 const socialNode = addItem({
@@ -97,5 +110,6 @@ addItem({
     description: "<a href=\"https://github.com/alimohammadiamirhossein\">Github</a>",
     picture: "/static/images/github.jpg",
 }, socialNode);
+
 
 
