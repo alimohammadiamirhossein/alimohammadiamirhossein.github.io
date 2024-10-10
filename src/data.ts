@@ -20,7 +20,7 @@ export type Tree = {
     children: Tree[]
 }
 
-const rootItem: CVItem = {picture: "/static/images/Amir.png", depth: 0, relSize: 1, relDistance: 1};
+const rootItem: CVItem = {picture: "/static/images/Amir.jpg", depth: 0, relSize: 1, relDistance: 1};
 const tree = {item: rootItem, children: []};
 
 
@@ -56,7 +56,7 @@ export function getTree() {
 }
 
 const cvNode = addItem({
-    description: "You can download a more formal resume <a href=\"/static/cv.pdf\">here</a>",
+    description: "You can download a more formal resume <a href=\"/static/CV.pdf\">here</a>",
     picture: "/static/images/cv.jpg",
 }, rootItem);
 
@@ -74,7 +74,7 @@ const yscNode = addItem({
 
 const imcNode = addItem({
     description: "Silver Medalist, International Mathematics Competition 2016, Thailand</br>Bronze Medalist, International Mathematics Competition 2015, China",
-    picture: "/static/images/imc.jpg"
+    picture: "/static/images/imc.png"
 }, highSchoolNode);
 
 
