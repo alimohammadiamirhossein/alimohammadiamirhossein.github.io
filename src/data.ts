@@ -1,4 +1,6 @@
-export type CVInfo = {
+import * as assert from "assert";
+
+type CVInfo = {
     picture: string,
     description?: string,
     relDistance?: number;
