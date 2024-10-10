@@ -55,6 +55,29 @@ export function getTree() {
     return tree;
 }
 
+const cvNode = addItem({
+    description: "You can download a more formal resume <a href=\"/static/cv.pdf\">here</a>",
+    picture: "/static/images/cv.jpg",
+}, rootItem);
+
+const highSchoolNode = addItem({
+    description: "Studied in Salam HighSchool 2015-2018 (Tehran, Iran)<br/>\
+                  Taught Math Olympiad topics, including Number Theory and Algebra, from 2019 to 2021. <br/>",
+    picture: "/static/images/salam.jpg"
+}, rootItem);
+
+const yscNode = addItem({
+    description: "Achieved a Gold Medal in the 35th Iranian National Olympiad in Mathematics.<br/>\
+                                Became a member of young scholars club",
+    picture: "/static/images/ysc.jpg"
+}, highSchoolNode);
+
+const imcNode = addItem({
+    description: "Silver Medalist, International Mathematics Competition 2016, Thailand</br>Bronze Medalist, International Mathematics Competition 2015, China",
+    picture: "/static/images/imc.jpg"
+}, highSchoolNode);
+
+
 // Social Node section
 const socialNode = addItem({
     picture: "/static/images/social.jpg"
