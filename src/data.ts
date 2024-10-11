@@ -62,7 +62,7 @@ const cvNode = addItem({
 
 const highSchoolNode = addItem({
     description: "Studied in Salam HighSchool 2015-2018 (Tehran, Iran)<br/>\
-                  Taught Math Olympiad topics, including Number Theory and Algebra, from 2019 to 2021. <br/>",
+                  Taught Math Olympiad topics, including Number Theory and Algebra, from 2017 to 2023. <br/>",
     picture: "/static/images/salam.jpg"
 }, rootItem);
 
@@ -85,23 +85,32 @@ const sharifNode = addItem({
 }, rootItem);
 
 const thesisNode = addItem({
-    description: "Bachelor Thesis: <a href=\"/static/CV.pdf\">CryptoPredictions</a></br>" +
+    description: "Bachelor Thesis: <a href=\"/static/Bachelor_Thesis.pdf\">CryptoPredictions</a></br>" +
         "Implemented an open-source library for predicting and forecasting cryptocurrency prices.<br/>" +
         "The library includes 9 models, 10 metrics, and over 30 indicators, and supports more than 15 popular cryptocurrencies.",
     picture: "/static/images/thesis.png"
 }, sharifNode);
 
-const epflNode = addItem({
+
+const epflInternshipNode = addItem({
     description: `Research Intern at <a href="https://www.epfl.ch/labs/vita/">VITA lab, EPFL</a> (Dec 2021 - Jul 2022)
                   <br>
                   <p>
                       Supervised by Prof. Alexandre Alahi and Dr. Saeed Saadatnejad.<br>
                       Tackled 3D human pose forecasting via a novel method of modeling uncertainty.<br>
-                      The work is in the process of being published and submitted to ICCV2023.
+                      This research led to a paper titled <a href="https://arxiv.org/abs/2304.06707">Toward Reliable Human Pose Forecasting with Uncertainty</a>, published in RA-L 2024.
                   </p>
     `,
     picture: "/static/images/epfl.png"
 }, rootItem);
+
+
+const unposedLibraryNode = addItem({
+    description: `Implemented an open-source library, <a href="https://github.com/vita-epfl/unposed">Unposed</a>, 
+                  for 3D human pose forecasting. The library includes several models, datasets, and metrics, 
+                  all implemented in a standardized way to ensure a unified and fair evaluation, and promote research in this field.`,
+    picture: "/static/images/vita.png"
+}, epflInternshipNode);
 
 
 // Social Node section
@@ -125,4 +134,10 @@ addItem({
 }, socialNode);
 
 
+const sfuNode = addItem({
+    description: "Simon Fraser University (BC, Canada)<br>" +
+        "M.Sc. Computing Science, 2023-2025<br>" +
+        "GPA - 4.07/4.33<br>",
+    picture: "/static/images/sfu.png"
+}, rootItem);
 
