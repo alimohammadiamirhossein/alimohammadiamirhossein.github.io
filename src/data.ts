@@ -113,6 +113,14 @@ const unposedLibraryNode = addItem({
 }, epflInternshipNode);
 
 
+const sfuNode = addItem({
+    description: "Simon Fraser University (BC, Canada)<br>" +
+        "M.Sc. Computing Science, 2023-2025<br>" +
+        "GPA - 4.07/4.33<br>",
+    picture: "/static/images/sfu.png"
+}, rootItem);
+
+
 // Social Node section
 const socialNode = addItem({
     picture: "/static/images/social.jpg"
@@ -132,12 +140,4 @@ addItem({
     description: "<a href=\"https://github.com/alimohammadiamirhossein\">Github</a>",
     picture: "/static/images/github.jpg",
 }, socialNode);
-
-
-const sfuNode = addItem({
-    description: "Simon Fraser University (BC, Canada)<br>" +
-        "M.Sc. Computing Science, 2023-2025<br>" +
-        "GPA - 4.07/4.33<br>",
-    picture: "/static/images/sfu.png"
-}, rootItem);
 
