@@ -91,6 +91,19 @@ const thesisNode = addItem({
     picture: "/static/images/thesis.png"
 }, sharifNode);
 
+const epflNode = addItem({
+    description: `Research Intern at <a href="https://www.epfl.ch/labs/vita/">VITA lab, EPFL</a> (Dec 2021 - Jul 2022)
+                  <br>
+                  <p>
+                      Supervised by Prof. Alexandre Alahi and Dr. Saeed Saadatnejad.<br>
+                      Tackled 3D human pose forecasting via a novel method of modeling uncertainty.<br>
+                      The work is in the process of being published and submitted to ICCV2023.
+                  </p>
+    `,
+    picture: "/static/images/epfl.png"
+}, rootItem);
+
+
 // Social Node section
 const socialNode = addItem({
     picture: "/static/images/social.jpg"
