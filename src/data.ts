@@ -116,6 +116,7 @@ const thesisNode = addItem({
 const sfuNode = addItem({
     description: "Simon Fraser University (BC, Canada)<br>" +
         "M.Sc. Computing Science, 2023-2025<br>" +
+        "Supervised by Prof. Ali Mahdavi-Amiri<br>" +
         "GPA - 4.07/4.33<br>",
     picture: "/static/images/sfu.png"
 }, rootItem);
