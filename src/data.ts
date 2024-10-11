@@ -122,7 +122,6 @@ const sfuNode = addItem({
 }, rootItem);
 
 
-// Social Node section
 const socialNode = addItem({
     picture: "/static/images/social.jpg"
 }, rootItem);
