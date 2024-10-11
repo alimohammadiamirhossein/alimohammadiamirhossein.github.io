@@ -2,7 +2,7 @@
 
 a website that shows cv in a tree-like structure.
 
-![img.png](static/screenshot.png)
+![img.png](static/images/screenshot.png)
 
 ### deployment
 
