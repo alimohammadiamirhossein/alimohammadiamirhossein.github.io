@@ -95,7 +95,7 @@ const unposedLibraryNode = addItem({
     description: `Implemented an open-source library, <a href="https://github.com/vita-epfl/unposed">Unposed</a>, 
                   for 3D human pose forecasting. The library includes several models, datasets, and metrics, 
                   all implemented in a standardized way to ensure a unified and fair evaluation, and promote research in this field.`,
-    picture: "/static/images/vita.png"
+    picture: "/static/images/unposed.png"
 }, epflInternshipNode);
 
 
@@ -121,6 +121,11 @@ const sfuNode = addItem({
     picture: "/static/images/sfu.png"
 }, rootItem);
 
+const smiteNode = addItem({
+    description: "Developed a novel model to segment objects in video frames with arbitrary granularity.</br>" +
+        "Used a pre-trained text-to-image diffusion model and tracking mechanism to improve accuracy.",
+    picture: "/static/images/smite.png"
+}, sfuNode);
 
 const socialNode = addItem({
     picture: "/static/images/social.jpg"
