@@ -10,82 +10,89 @@
 
   <!-- SEO -->
   <meta name="description" content="Official website of Amir Alimohammadi – research projects and publications.">
-  <meta name="keywords"    content="Amir Alimohammadi, computer vision, publications, projects, SFU, EPFL, Sharif">
+  <meta name="keywords" content="Amir Alimohammadi, computer vision, publications, projects, SFU, EPFL, Sharif">
 
-  <!-- Stylesheets -->
+  <!-- make it responsive on mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- your main stylesheet -->
   <link rel="stylesheet" href="static/style.css">
+
   <style>
+    /* ─── Base styles ───────────────────────────────────────────────────────── */
     html, body {
       margin: 0;
-      height: 100%;
+      min-height: 100%;
       background: linear-gradient(135deg, #1e3c72, #2a5298);
       background-attachment: fixed;
       font-family: system-ui, sans-serif;
     }
-
-    /* reserve space for both sidebars */
     body.has-sidebar {
       margin-left: 280px;
       margin-right: 340px;
       color: white;
+      overflow-x: hidden;
     }
-
-    /* Override dynamically positioned SVG from JS */
     svg {
       position: absolute !important;
       left: -1px !important;
       display: block;
     }
 
-    /* Left sidebar: About Me */
+    /* ─── About Me sidebar ───────────────────────────────────────────────── */
     .about-sidebar {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 280px;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 280px; height: 100vh;
       padding: 1.5rem 1rem;
       box-sizing: border-box;
-      background: rgba(0,0,0,.4);
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(6px);
       overflow-y: auto;
       color: #fff;
       z-index: 10;
     }
     .about-sidebar h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
       font-size: 1.4rem;
-      border-bottom: 1px solid rgba(255,255,255,.4);
+      border-bottom: 1px solid rgba(255,255,255,0.4);
       padding-bottom: .5rem;
     }
     .about-sidebar p {
       margin-bottom: 1rem;
-      line-height: 1.4;
+      line-height: 1.55;
       font-size: .95rem;
       color: #ddd;
+      text-align: justify;
+      hyphens: auto;
+      overflow-wrap: break-word;
+    }
+    .about-sidebar a {
+      color: #ffd85e;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    .about-sidebar a:hover {
+      border-color: currentColor;
     }
 
-    /* Right sidebar: Publications */
+    /* ─── Publications sidebar ─────────────────────────────────────────────── */
     .papers-sidebar {
       position: fixed;
-      top: 0;
-      right: 0;
-      width: 320px;
-      height: 100vh;
+      top: 0; right: 0;
+      width: 320px; height: 100vh;
       padding: 1.5rem 1.25rem;
       box-sizing: border-box;
-      background: rgba(0,0,0,.4);
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(6px);
       overflow-y: auto;
       color: #fff;
       z-index: 10;
     }
     .papers-sidebar h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
       font-size: 1.4rem;
-      border-bottom: 1px solid rgba(255,255,255,.4);
+      border-bottom: 1px solid rgba(255,255,255,0.4);
       padding-bottom: .5rem;
     }
     .paper {
@@ -109,49 +116,81 @@
     .paper a:hover {
       border-color: currentColor;
     }
+
+    /* ─── Mobile: collapse everything into one scrollable flow ───────────── */
+    @media (max-width: 768px) {
+      /* restore native page scrolling */
+      html, body {
+        height: auto !important;
+        min-height: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      /* remove side margins */
+      body.has-sidebar {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+      /* stack asides full‑width, disable their own scrollbars */
+      .about-sidebar,
+      .papers-sidebar {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: rgba(0,0,0,0.7) !important;
+        backdrop-filter: none !important;
+      }
+      /* let SVGs flow, too */
+      svg {
+        position: relative !important;
+        left: auto !important;
+      }
+    }
   </style>
 
   <title>Amir Alimohammadi</title>
 </head>
+
 <body class="has-sidebar">
-  <!-- Left: About Me sidebar -->
+  <!-- About Me -->
   <aside class="about-sidebar">
     <h2>About Me</h2>
-    <p>Hello, I am Amir Alimohammadi, a second-year Master’s student in Computer Science at Simon Fraser University (SFU). I am a member of the <a href="https://gruvi.cs.sfu.ca/" target="_blank">GrUVi lab</a>, where I am fortunate to be supervised by <a href="https://www.sfu.ca/~amahdavi/" target="_blank">Professor Ali Mahdavi-Amiri</a>. My research is situated at the intersection of computer vision and computer graphics, with a current focus on image and video manipulation using foundational models.</p>
-    <p>Prior to joining SFU, I earned my Bachelor’s degree in Computer Engineering from Sharif University of Technology.</p>
+    <p>Hello, I am Amir Alimohammadi, a second-year Master’s student in Computer Science at Simon Fraser University (SFU). I am a member of the <a href="https://gruvi.cs.sfu.ca/" target="_blank">GrUVi lab</a>, where I am fortunate to be supervised by <a href="https://www.sfu.ca/~amahdavi/" target="_blank">Professor Ali Mahdavi-Amiri</a>. My research lies at the intersection of computer vision and graphics, with a focus on image/video manipulation via foundational models.</p>
+    <p>Prior to joining SFU, I earned my Bachelor’s in Computer Engineering from Sharif University of Technology. During that time, I completed a research internship at EPFL working on human pose prediction.</p>
   </aside>
-  
 
-  <!-- main graph (injected by bundle.js) -->
-
-  <!-- Right: Publications sidebar -->
+  <!-- Publications -->
   <aside class="papers-sidebar">
     <h2>Publications</h2>
     <article class="paper">
-      <h3>Cora: Correspondence-aware image editing using few step diffusion</h3>
+      <h3>Cora: Correspondence‑aware image editing using few‑step diffusion</h3>
       <p><em>arXiv Preprint</em><br>
-        <a href="https://cora-edit.github.io/" target="_blank">Project page</a> | 
-        <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> | 
-        <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
+         <a href="https://cora-edit.github.io/" target="_blank">Project page</a> |
+         <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> |
+         <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
       </p>
     </article>
     <article class="paper">
-      <h3>SMITE: Segment Me In TimE</h3>
-      <p><em>ICLR 2025</em><br>
-        <a href="https://segment-me-in-time.github.io/" target="_blank">Project page</a> | 
-        <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> | 
-        <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
+      <h3>SMITE: Segment Me In Time</h3>
+      <p><em>ICLR 2025</em><br>
+         <a href="https://segment-me-in-time.github.io/" target="_blank">Project page</a> |
+         <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> |
+         <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
       </p>
     </article>
     <article class="paper">
       <h3>Toward Reliable Human Pose Forecasting with Uncertainty</h3>
-      <p><em>RA-L 2024</em><br>
-        <a href="https://vitademo.epfl.ch/prediction" target="_blank">Live demo</a> | 
-        <a href="https://arxiv.org/abs/2304.06707" target="_blank">arXiv</a> | 
-        <a href="https://github.com/vita-epfl/unposed" target="_blank">Code</a>
+      <p><em>RA‑L 2024</em><br>
+         <a href="https://vitademo.epfl.ch/prediction" target="_blank">Live demo</a> |
+         <a href="https://arxiv.org/abs/2304.06707" target="_blank">arXiv</a> |
+         <a href="https://github.com/vita-epfl/unposed" target="_blank">Code</a>
       </p>
     </article>
   </aside>
+
+  <!-- Main content (your JS graph/app) -->
+  <div id="main-content"></div>
 
   <script src="dist/bundle.js" defer></script>
 </body>
