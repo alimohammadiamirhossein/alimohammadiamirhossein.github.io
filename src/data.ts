@@ -122,9 +122,18 @@ const sfuNode = addItem({
 }, rootItem);
 
 const smiteNode = addItem({
-    description: "Developed a novel model to segment objects in video frames with arbitrary granularity.</br>" +
+    description: "ICLR 2025: <a href=\"https://segment-me-in-time.github.io/\">Segment Me in TimE</a></br>" +
+    "Developed a novel model to segment objects in video frames with arbitrary granularity.</br>" +
         "Used a pre-trained text-to-image diffusion model and tracking mechanism to improve accuracy.",
     picture: "/static/images/smite.png"
+}, sfuNode);
+
+const coraNode = addItem({
+    description: "arXiv Preprint: <a href=\"https://cora-edit.github.io/\">Correspondence-aware image editing using few step diffusion</a></br>" +
+    "Developed a correspondence‑aware few‑step diffusion editing framework that<br/>" +
+    "aligns source–target semantics via patch correspondences, enabling complex pose &<br/>" +
+    "structure‑preserving edits while controlling the balance between content generation and preservation.",
+    picture: "/static/images/cora.png"
 }, sfuNode);
 
 const socialNode = addItem({

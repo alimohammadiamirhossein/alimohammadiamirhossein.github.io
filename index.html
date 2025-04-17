@@ -1,23 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7J6975QSS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-S7J6975QSS');
-    </script>
-    <!-- SEO Meta Tags for Your Name -->
-    <meta name="description" content="Official website of Amir Alimohammadi, showcasing projects, and contact information.">
-    <meta name="keywords" content="Amir Alimohammadi, Amirhossein Alimohammadi, computer vision, projects, contact, SFU, EPFL, Sharif">
-    
-    <link rel="stylesheet" href="static/style.css">
-    <title>Amir Alimohammadi</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7J6975QSS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-S7J6975QSS');
+  </script>
+
+  <!-- SEO -->
+  <meta name="description" content="Official website of Amir Alimohammadi – research projects and publications.">
+  <meta name="keywords"    content="Amir Alimohammadi, computer vision, publications, projects, SFU, EPFL, Sharif">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="static/style.css">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background-attachment: fixed;
+      font-family: system-ui, sans-serif;
+    }
+
+    /* reserve space for both sidebars */
+    body.has-sidebar {
+      margin-left: 280px;
+      margin-right: 340px;
+      color: white;
+    }
+
+    /* Override dynamically positioned SVG from JS */
+    svg {
+      position: absolute !important;
+      left: -1px !important;
+      display: block;
+    }
+
+    /* Left sidebar: About Me */
+    .about-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      padding: 1.5rem 1rem;
+      box-sizing: border-box;
+      background: rgba(0,0,0,.4);
+      backdrop-filter: blur(6px);
+      overflow-y: auto;
+      color: #fff;
+      z-index: 10;
+    }
+    .about-sidebar h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      border-bottom: 1px solid rgba(255,255,255,.4);
+      padding-bottom: .5rem;
+    }
+    .about-sidebar p {
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      font-size: .95rem;
+      color: #ddd;
+    }
+
+    /* Right sidebar: Publications */
+    .papers-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      height: 100vh;
+      padding: 1.5rem 1.25rem;
+      box-sizing: border-box;
+      background: rgba(0,0,0,.4);
+      backdrop-filter: blur(6px);
+      overflow-y: auto;
+      color: #fff;
+      z-index: 10;
+    }
+    .papers-sidebar h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      border-bottom: 1px solid rgba(255,255,255,.4);
+      padding-bottom: .5rem;
+    }
+    .paper {
+      margin-bottom: 1.25rem;
+    }
+    .paper h3 {
+      margin: 0 0 .25rem;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+    .paper em {
+      color: #ccc;
+      font-style: italic;
+      font-size: .9rem;
+    }
+    .paper a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      color: #ffd85e;
+    }
+    .paper a:hover {
+      border-color: currentColor;
+    }
+  </style>
+
+  <title>Amir Alimohammadi</title>
 </head>
-<body>
+<body class="has-sidebar">
+  <!-- Left: About Me sidebar -->
+  <aside class="about-sidebar">
+    <h2>About Me</h2>
+    <p>Hi, I’m Amir Alimohammadi. I’m a computer vision researcher focusing on 3D human pose forecasting, video segmentation, and noise correction in editing. Affiliated with EPFL & SFU.</p>
+    <p>Previously, I’ve worked on modeling uncertainty in pose predictions and open-source libraries for fair benchmarking.</p>
+  </aside>
+
+  <!-- main graph (injected by bundle.js) -->
+
+  <!-- Right: Publications sidebar -->
+  <aside class="papers-sidebar">
+    <h2>Publications</h2>
+    <article class="paper">
+      <h3>Cora: Correspondence-aware image editing using few step diffusion</h3>
+      <p><em>arXiv Preprint</em><br>
+        <a href="https://cora-edit.github.io/" target="_blank">Project page</a> | 
+        <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> | 
+        <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
+      </p>
+    </article>
+    <article class="paper">
+      <h3>SMITE: Segment Me In TimE</h3>
+      <p><em>ICLR 2025</em><br>
+        <a href="https://segment-me-in-time.github.io/" target="_blank">Project page</a> | 
+        <a href="https://arxiv.org/abs/2410.18538" target="_blank">arXiv</a> | 
+        <a href="https://github.com/alimohammadiamirhossein/smite" target="_blank">Code</a>
+      </p>
+    </article>
+    <article class="paper">
+      <h3>Toward Reliable Human Pose Forecasting with Uncertainty</h3>
+      <p><em>RA-L 2024</em><br>
+        <a href="https://vitademo.epfl.ch/prediction" target="_blank">Live demo</a> | 
+        <a href="https://arxiv.org/abs/2304.06707" target="_blank">arXiv</a> | 
+        <a href="https://github.com/vita-epfl/unposed" target="_blank">Code</a>
+      </p>
+    </article>
+  </aside>
+
+  <script src="dist/bundle.js" defer></script>
 </body>
-<script src="dist/bundle.js" defer></script>
 </html>
