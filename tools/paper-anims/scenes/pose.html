@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pose forecasting with uncertainty</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .tl { position: absolute; inset: 0; padding: 0 11px; display: flex; flex-direction: column; justify-content: center; gap: 7px; }
+  .tl .names { position: relative; height: 11px; font-size: 10px; font-weight: 600; }
+  .tl .names span { position: absolute; top: 0; white-space: nowrap; }
+  .tl .track { position: relative; height: 4px; }
+  .seg { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: var(--line); overflow: hidden; }
+  .seg i { position: absolute; left: 0; top: 0; bottom: 0; }
+  .head { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; box-sizing: border-box; border-radius: 50%;
+          background: #fff; border: 2px solid var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,.18); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ol" style="left:16px;top:14px">Observed poses</div>
+  <div class="ol out" style="left:246px;top:14px">Forecast vs. ground truth</div>
+
+  <div class="frame" id="f-in" style="left:16px;top:28px;width:206px;height:98px"><canvas id="in"></canvas></div>
+
+  <div class="ol" style="left:16px;top:136px">Timeline</div>
+  <div class="card" style="left:16px;top:150px;width:206px;height:56px">
+    <div class="tl">
+      <div class="names"><span id="n0" style="left:0">Observe</span><span id="n1">Forecast</span></div>
+      <div class="track" id="track">
+        <div class="seg" id="s0"><i id="i0" style="background:var(--ink)"></i></div>
+        <div class="seg" id="s1"><i id="i1" style="background:var(--accent)"></i></div>
+        <div class="head" id="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="link" style="left:234px;top:117px"></div>
+  <div class="frame" id="f-out" style="left:246px;top:28px;width:178px;height:178px"><canvas id="out"></canvas></div>
+</div>
+<script src="anim.js"></script>
+<script>
+  // The two clips from the UnPOSed README ("Input pose", then "Output pose and ground-truth"), in order:
+  // first the observed poses play on the left, then the forecast plays on the right.
+  const FPS = 15;
+  const CROP_IN = [0, 50, 600, 285];     // the whole street, for the wide input box
+  const CROP_OUT = [175, 80, 250, 250];  // square around the pedestrians being forecast
+  const TRACK = 182, GAP = 4;            // timeline width inside the card
+  let meta, sheets, cin, cout, d0, d1;
+  const $ = id => document.getElementById(id);
+
+  scene({
+    duration: (71 + 67) / FPS,
+    async setup() {
+      meta = await (await fetch("../assets/meta.json")).json();
+      sheets = { in: await A.load("../assets/pose/input.jpg"), out: await A.load("../assets/pose/output.jpg") };
+      cin = A.ctx($("in"));
+      cout = A.ctx($("out"));
+      d0 = meta.pose_in.frames / FPS; d1 = meta.pose_out.frames / FPS;
+      // segment widths follow the two clips' lengths
+      const w0 = (TRACK - GAP) * d0 / (d0 + d1);
+      Object.assign($("s0").style, { left: "0px", width: w0 + "px" });
+      Object.assign($("s1").style, { left: w0 + GAP + "px", width: TRACK - w0 - GAP + "px" });
+      $("n1").style.left = w0 + GAP + "px";
+    },
+    render(t) {
+      const phase = t < d0 ? 0 : 1, u = phase ? t - d0 : t;
+      const mi = meta.pose_in, mo = meta.pose_out;
+      const k = A.span(u, 0, 0.35);   // hand-over between the two boxes
+
+      // left: plays while observing, then holds its last frame; right: waits on its first frame, then plays
+      if (phase === 0) {
+        A.frame(cin, sheets.in, mi, Math.floor(u * FPS), 206, 98, 1, CROP_IN);
+        A.frame(cout, sheets.out, mo, 0, 178, 178, 1, CROP_OUT);
+        if (k < 1) A.frame(cout, sheets.out, mo, mo.frames - 1, 178, 178, 1 - k, CROP_OUT);   // loop seam
+      } else {
+        A.frame(cin, sheets.in, mi, mi.frames - 1, 206, 98, 1, CROP_IN);
+        A.frame(cout, sheets.out, mo, Math.floor(u * FPS), 178, 178, 1, CROP_OUT);
+      }
+      const active = phase === 0 ? 1 - k : k;            // 0 = observing, 1 = forecasting (eased)
+      const dim = x => `saturate(${0.35 + 0.65 * x}) opacity(${0.55 + 0.45 * x})`;
+      $("f-in").style.filter = dim(1 - active);
+      $("f-out").style.filter = dim(active);
+
+      // timeline: each segment fills as its clip plays; the playhead runs across both
+      const w0 = parseFloat($("s0").style.width), w1 = parseFloat($("s1").style.width);
+      const p0 = phase === 0 ? u / d0 : 1, p1 = phase === 1 ? u / d1 : 0;
+      $("i0").style.width = p0 * 100 + "%";
+      $("i1").style.width = p1 * 100 + "%";
+      $("head").style.left = (phase === 0 ? p0 * w0 : w0 + GAP + p1 * w1) + "px";
+      $("head").style.borderColor = phase === 0 ? "#16161a" : "#a6192e";
+      $("n0").style.color = A.mix("#9b9ba3", "#16161a", 1 - active);
+      $("n1").style.color = A.mix("#9b9ba3", "#a6192e", active);
+    },
+  });
+</script>
+</body>
+</html>

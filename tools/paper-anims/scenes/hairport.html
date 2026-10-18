@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HairPort · hair import and transfer</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .frame img { opacity: 0; }
+  .plus { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; z-index: 6; box-sizing: border-box;
+          display: grid; place-items: center; border-radius: 50%; background: #fff; border: 1px solid var(--line-strong);
+          font-size: 11px; font-weight: 500; line-height: 1; color: var(--muted); }
+  .scan { position: absolute; left: 0; right: 0; height: 2px; z-index: 9; background: var(--accent);
+          box-shadow: 0 0 10px 2px rgba(166, 25, 46, 0.45); opacity: 0; }
+
+  /* the method's three stages, as named on the project page */
+  .steps { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); padding: 9px 6px 0; }
+  .step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+  .dot { position: relative; z-index: 1; width: 15px; height: 15px; box-sizing: border-box; border-radius: 50%;
+         display: grid; place-items: center; border: 1.5px solid; background: #fff;
+         font-size: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .name { font-size: 8.5px; line-height: 10px; font-weight: 600; }
+  .bar { position: absolute; top: 16px; height: 1.5px; background: var(--line-strong); }
+  .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ol" style="left:16px;top:14px">Source</div>
+  <div class="ol" style="left:124px;top:14px">Hair reference</div>
+  <div class="ol out" style="left:246px;top:14px">HairPort result</div>
+
+  <div class="frame" id="face" style="left:16px;top:28px;width:98px;height:98px"></div>
+  <div class="plus" style="left:119px;top:77px">+</div>
+  <div class="frame" id="hair" style="left:124px;top:28px;width:98px;height:98px"></div>
+
+  <div class="ol" style="left:16px;top:136px">Pipeline</div>
+  <div class="ol r" id="count" style="right:218px;top:136px"></div>
+  <div class="card" style="left:16px;top:150px;width:206px;height:56px">
+    <div class="bar" style="left:40px;width:62px"><i id="b0"></i></div>
+    <div class="bar" style="left:104px;width:62px"><i id="b1"></i></div>
+    <div class="steps" id="steps"></div>
+  </div>
+
+  <div class="link" style="left:234px;top:117px"></div>
+  <div class="frame" id="result" style="left:246px;top:28px;width:178px;height:178px"><i class="scan" id="scan"></i></div>
+</div>
+<script src="anim.js"></script>
+<script>
+  // Real HairPort results from the project page, cycled. The pipeline card steps through the method's
+  // stages while the result is revealed top-down over the source.
+  const N = 4, STEP = 2.8;
+  const STAGES = [["Bald", "converter"], ["3D-aware", "transfer"], ["Flow-matching", "synthesis"]];
+  const T = [[0.35, 0.85], [0.85, 1.35], [1.35, 2.1]];   // when each stage runs, within an example
+  const $ = id => document.getElementById(id);
+
+  const steps = STAGES.map(([a, b], i) => {
+    const el = document.createElement("div");
+    el.className = "step";
+    el.innerHTML = `<span class="dot">${i + 1}</span><span class="name">${a}<br>${b}</span>`;
+    $("steps").appendChild(el);
+    return { dot: el.querySelector(".dot"), name: el.querySelector(".name") };
+  });
+  const layers = [];   // per example: face, hair, the face again under the result, the result
+  for (let i = 0; i < N; i++) {
+    const add = (box, file) => { const im = document.createElement("img"); im.src = `../assets/hairport/${i}_${file}.jpg`; $(box).prepend(im); return im; };
+    layers.push({ face: add("face", "face"), hair: add("hair", "hair"), base: add("result", "face"), out: add("result", "result") });
+  }
+
+  scene({
+    duration: N * STEP,
+    setup: () => Promise.all(layers.flatMap(l => Object.values(l)).map(im => im.decode())),
+    render(t) {
+      const k = Math.floor(t / STEP) % N, u = t - k * STEP, p = (k + N - 1) % N;
+      const fade = A.span(u, 0, 0.35), wipe = A.span(u, T[2][0], T[2][1]);
+      layers.forEach((l, i) => {
+        const on = i === k ? fade : i === p ? 1 : 0;
+        const z = i === k ? 6 : i === p ? 4 : 2;
+        for (const im of [l.face, l.hair, l.base]) { im.style.opacity = on; im.style.zIndex = z; }
+        // the previous result stays under the incoming source; the current one wipes in from the top
+        l.out.style.zIndex = z + 1;
+        l.out.style.opacity = i === p ? 1 : i === k && wipe > 0 ? 1 : 0;
+        l.out.style.clipPath = i === k ? `inset(0 0 ${(1 - wipe) * 100}% 0)` : "none";
+      });
+      $("scan").style.top = (wipe * 178 - 1) + "px";
+      $("scan").style.opacity = wipe > 0 && wipe < 1 ? 1 : 0;
+
+      // stage states: waiting (grey), running (accent ring), done (filled)
+      const reset = 1 - A.span(u, 0, 0.3);          // the previous example's finished state clears as the next one loads
+      steps.forEach((s, i) => {
+        const run = A.span(u, T[i][0], T[i][0] + 0.15), done = Math.max(A.span(u, T[i][1] - 0.1, T[i][1]), reset);
+        s.dot.style.borderColor = A.mix("#d6d2c9", "#a6192e", Math.max(run, done));
+        s.dot.style.background = A.mix("#ffffff", "#a6192e", done);
+        s.dot.style.color = done > 0.5 ? "#ffffff" : A.mix("#9b9ba3", "#a6192e", run);
+        s.name.style.color = A.mix("#9b9ba3", "#16161a", Math.max(run, done));
+      });
+      for (const i of [0, 1]) $("b" + i).style.width = Math.max(A.span(u, T[i][1] - 0.1, T[i + 1][0] + 0.1), reset) * 100 + "%";
+      $("count").textContent = `${k + 1} / ${N}`;
+    },
+  });
+</script>
+</body>
+</html>

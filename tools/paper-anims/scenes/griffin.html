@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Griffin · reference and layout guided composition</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .frame img { opacity: 0; }
+  .ph { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, #f3f1ec 0 6px, #eceae4 6px 12px); }
+  .refs { position: absolute; left: 124px; top: 28px; width: 98px; height: 98px; }
+  .refs img { position: absolute; width: 46px; height: 46px; border-radius: 7px; object-fit: cover; opacity: 0; }
+  .prompt { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 11px;
+            font-size: 11px; font-weight: 500; color: var(--body); white-space: nowrap; }
+  .prompt b { font-weight: 600; }
+  .caret { display: inline-block; width: 1px; height: 12px; margin-left: 1px; vertical-align: -2px; background: var(--ink); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ol" style="left:16px;top:14px">Layout</div>
+  <div class="ol" style="left:124px;top:14px">References</div>
+  <div class="ol out" style="left:246px;top:14px">Griffin output</div>
+
+  <div class="frame" id="layout" style="left:16px;top:28px;width:98px;height:98px"></div>
+  <div class="refs" id="refs"></div>
+
+  <div class="ol" style="left:16px;top:136px">Prompt</div>
+  <div class="ol r" id="count" style="right:218px;top:136px"></div>
+  <div class="card" style="left:16px;top:150px;width:206px;height:56px"><div class="prompt"><span id="prompt"></span></div></div>
+
+  <div class="link" style="left:234px;top:117px"></div>
+  <div class="frame" id="output" style="left:246px;top:28px;width:178px;height:178px"><i class="ph"></i></div>
+</div>
+<script src="anim.js"></script>
+<script>
+  // Real Griffin results from the paper's teaser: a layout (boxes or masks) + one image per element → output.
+  // Each reference keeps the coloured border of its region in the layout; prompt words share those colours.
+  const EXAMPLES = [
+    { key: "hat",   prompt: [["… wearing a "], ["hat", "#c2185b"], [" in the snow"]] },
+    { key: "glass", prompt: [["… wearing "], ["sunglasses", "#2e7d32"], [" at the beach"]] },
+    { key: "hair",  prompt: [["… at the beach"]] },
+  ];
+  const STEP = 3.4, N = EXAMPLES.length, TILE = 46, GAP = 6;
+  const $ = id => document.getElementById(id);
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  let sets;
+
+  function typed(parts, n) {        // the first n characters of the prompt, keeping highlight colours
+    let html = "";
+    for (const [text, color] of parts) {
+      if (n <= 0) break;
+      const s = esc(text.slice(0, n)); n -= text.length;
+      html += color ? `<b style="color:${color}">${s}</b>` : s;
+    }
+    return html;
+  }
+
+  scene({
+    duration: N * STEP,
+    async setup() {
+      const meta = await (await fetch("../assets/meta.json")).json();
+      sets = EXAMPLES.map(e => {
+        const add = (box, part) => { const im = document.createElement("img"); im.src = `../assets/griffin/${e.key}_${part}.jpg`; $(box).appendChild(im); return im; };
+        const n = meta.griffin_refs[e.key];
+        // two references sit side by side, centred; a third goes centred underneath
+        const rows = n > 2 ? [2, n - 2] : [n], h = rows.length * TILE + (rows.length - 1) * GAP;
+        const refs = [];
+        rows.forEach((count, r) => {
+          for (let c = 0; c < count; c++) {
+            const im = add("refs", "ref" + refs.length);
+            im.style.left = (98 - (count * TILE + (count - 1) * GAP)) / 2 + c * (TILE + GAP) + "px";
+            im.style.top = (98 - h) / 2 + r * (TILE + GAP) + "px";
+            refs.push(im);
+          }
+        });
+        return { layout: add("layout", "layout"), refs, output: add("output", "output") };
+      });
+      await Promise.all(sets.flatMap(o => [o.layout, o.output, ...o.refs]).map(im => im.decode()));
+    },
+    render(t) {
+      const k = Math.floor(t / STEP) % N, u = t - k * STEP;
+      const out = 1 - A.span(u, 3.05, 3.4);                 // everything fades before the next example
+      const gen = A.span(u, 1.5, 2.2);                       // the output resolves from a blur
+      sets.forEach((o, i) => {
+        const cur = i === k;
+        o.layout.style.opacity = cur ? A.span(u, 0, 0.3) * out : 0;
+        o.refs.forEach((im, j) => {
+          const r = A.span(u, 0.2 + j * 0.1, 0.5 + j * 0.1);
+          im.style.opacity = cur ? r * out : 0;
+          im.style.transform = cur ? `translateY(${(1 - r) * 5}px)` : "";
+        });
+        o.output.style.opacity = cur ? gen * out : 0;
+        o.output.style.filter = cur ? `blur(${(1 - gen) * 9}px) saturate(${0.6 + 0.4 * gen})` : "";
+        o.output.style.transform = cur ? `scale(${1.06 - 0.06 * gen})` : "";
+      });
+      const parts = EXAMPLES[k].prompt, len = parts.reduce((s, [x]) => s + x.length, 0);
+      const n = Math.round(A.span(u, 0.5, 1.35, true) * len);
+      const caret = u > 0.45 && u < 1.7 && Math.floor(u * 4) % 2 === 0 ? '<i class="caret"></i>' : "";
+      $("prompt").innerHTML = typed(parts, n) + caret;
+      $("prompt").style.opacity = out;
+      $("count").textContent = `${k + 1} / ${N}`;
+    },
+  });
+</script>
+</body>
+</html>

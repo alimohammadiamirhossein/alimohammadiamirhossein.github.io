@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SMITE · Segment Me In TimE</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .opts { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 0 5px; }
+  .opt { position: relative; display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 5px; border-radius: 5px;
+         font-size: 10px; font-weight: 600; }
+  .opt canvas { width: 20px; height: 20px; border-radius: 4px; flex: none; box-shadow: 0 0 0 1px rgba(22,22,26,.08); }
+  .opt i { position: absolute; left: -5px; top: 6px; bottom: 6px; width: 2px; border-radius: 1px; background: var(--accent); }
+  .strip { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ol" style="left:16px;top:14px">Input video</div>
+  <div class="ol" style="left:124px;top:14px">Granularity</div>
+  <div class="ol out" style="left:246px;top:14px">SMITE output</div>
+
+  <div class="frame" style="left:16px;top:28px;width:98px;height:98px"><canvas id="in"></canvas></div>
+  <div class="card" style="left:124px;top:28px;width:98px;height:98px"><div class="opts" id="opts"></div></div>
+
+  <div class="ol" style="left:16px;top:136px">Across the clip</div>
+  <div class="ol r" id="frame" style="right:218px;top:136px"></div>
+  <div class="card" style="left:16px;top:150px;width:206px;height:56px"><canvas class="strip" id="strip"></canvas></div>
+
+  <div class="link" style="left:234px;top:117px"></div>
+  <div class="frame" style="left:246px;top:28px;width:178px;height:178px"><canvas id="out"></canvas></div>
+</div>
+<script src="anim.js"></script>
+<script>
+  // Real SMITE outputs from the project page: one face video segmented with three different part sets,
+  // each learned from a few annotated images. The strip shows the same parts held across the clip.
+  const SETS = [["div1", "Parts"], ["div2", "Quadrants"], ["div3", "Bands"]];
+  const HOLD = 3.2;            // seconds per segmentation; 3 × 3.2 = the clip's 96 frames at 10 fps
+  const S = 178, STRIP = { n: 6, size: 30, gap: 4.4 };
+  let meta, sheets = {}, cin, cout, cstrip, opts;
+
+  scene({
+    duration: 9.6,
+    async setup() {
+      meta = await (await fetch("../assets/meta.json")).json();
+      for (const k of ["input", ...SETS.map(s => s[0])]) sheets[k] = await A.load(`../assets/smite/${k}.jpg`);
+      opts = SETS.map(([key, label]) => {
+        const el = document.createElement("div");
+        el.className = "opt";
+        el.innerHTML = `<i></i><canvas></canvas><span>${label}</span>`;
+        document.getElementById("opts").appendChild(el);
+        return { el, bar: el.querySelector("i"), ctx: A.ctx(el.querySelector("canvas")), key };
+      });
+      cin = A.ctx(document.getElementById("in"));
+      cout = A.ctx(document.getElementById("out"));
+      cstrip = A.ctx(document.getElementById("strip"));
+    },
+    render(t) {
+      const m = meta.smite_input, f = Math.floor(t * 10) % m.frames;   // the source clip runs at 10 fps
+      const g = Math.floor(t / HOLD) % 3, prev = (g + 2) % 3;
+      const k = A.span(t - g * HOLD, 0, 0.4);
+      A.frame(cin, sheets.input, m, f, 98, 98);
+      A.frame(cout, sheets[SETS[prev][0]], m, f, S, S);
+      A.frame(cout, sheets[SETS[g][0]], m, f, S, S, k);
+
+      opts.forEach((o, i) => {
+        const on = i === g ? k : i === prev ? 1 - k : 0;
+        A.frame(o.ctx, sheets[o.key], m, f, 20, 20);
+        o.el.style.background = A.mix("#ffffff", "#f8eef0", on);
+        o.el.style.color = A.mix("#9b9ba3", "#16161a", on);
+        o.bar.style.opacity = on;
+      });
+
+      // filmstrip of the current segmentation across the whole clip, with a playhead
+      const W = 204, H = 54, x0 = (W - (STRIP.n * STRIP.size + (STRIP.n - 1) * STRIP.gap)) / 2, y0 = (H - STRIP.size) / 2;
+      cstrip.clearRect(0, 0, W, H);
+      for (let i = 0; i < STRIP.n; i++) {
+        const fi = Math.round(i * (m.frames - 1) / (STRIP.n - 1));
+        cstrip.save();
+        cstrip.translate(x0 + i * (STRIP.size + STRIP.gap), y0);
+        cstrip.beginPath(); cstrip.roundRect(0, 0, STRIP.size, STRIP.size, 3); cstrip.clip();
+        A.frame(cstrip, sheets[SETS[prev][0]], m, fi, STRIP.size, STRIP.size);
+        A.frame(cstrip, sheets[SETS[g][0]], m, fi, STRIP.size, STRIP.size, k);
+        cstrip.restore();
+      }
+      const span = STRIP.n * STRIP.size + (STRIP.n - 1) * STRIP.gap, px = x0 + (f / (m.frames - 1)) * span;
+      cstrip.fillStyle = "#a6192e";
+      cstrip.fillRect(px - 0.75, y0 - 6, 1.5, STRIP.size + 12);
+      cstrip.beginPath(); cstrip.arc(px, y0 - 6, 2.5, 0, Math.PI * 2); cstrip.fill();
+      document.getElementById("frame").textContent = `Frame ${String(f + 1).padStart(2, "0")} / ${m.frames}`;
+    },
+  });
+</script>
+</body>
+</html>

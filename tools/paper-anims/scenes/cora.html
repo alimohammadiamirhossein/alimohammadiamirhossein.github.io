@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cora · correspondence-aware editing</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  .prompt { display: flex; flex-direction: column; justify-content: center; padding: 0 11px; }
+  .prompt .text { font-size: 14px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+  .sliders { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 9px; padding: 0 11px; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; font-size: 10px; font-weight: 600; }
+  .row em { font-style: normal; color: var(--faint); margin-right: 5px; }
+  .row span { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 500; }
+  .track { position: relative; height: 3px; margin-top: 5px; border-radius: 2px; background: var(--line); }
+  .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: var(--accent); }
+  .knob { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
+          background: #fff; border: 2px solid var(--accent); box-sizing: border-box; box-shadow: 0 1px 2px rgba(0,0,0,.18); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ol" style="left:16px;top:14px">Input</div>
+  <div class="ol" style="left:124px;top:14px">Prompt</div>
+  <div class="ol out" style="left:246px;top:14px">Cora output</div>
+  <div class="ol r" style="right:16px;top:14px">4 diffusion steps</div>
+
+  <div class="frame" style="left:16px;top:28px;width:98px;height:98px"><img src="../assets/cora/input.jpg"></div>
+  <div class="card prompt" style="left:124px;top:28px;width:98px;height:98px">
+    <div class="text">“A <span id="w-app">golden</span> <span id="w-struct">robot</span>”</div>
+  </div>
+
+  <div class="ol" style="left:16px;top:136px">Edit strength</div>
+  <div class="card" style="left:16px;top:150px;width:206px;height:56px">
+    <div class="sliders">
+      <div>
+        <div class="row"><b><em>α</em>Appearance</b><span id="v-alpha">0.00</span></div>
+        <div class="track"><div class="fill" id="f-alpha"></div><div class="knob" id="k-alpha"></div></div>
+      </div>
+      <div>
+        <div class="row"><b><em>β</em>Structure</b><span id="v-beta">0.00</span></div>
+        <div class="track"><div class="fill" id="f-beta"></div><div class="knob" id="k-beta"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="link" style="left:234px;top:117px"></div>
+  <div class="frame" style="left:246px;top:28px;width:178px;height:178px"><canvas id="out"></canvas></div>
+</div>
+<script src="anim.js"></script>
+<script>
+  // The loop walks the edges of the α/β square, so every frame is a real output from the paper's
+  // 30×30 sweep (0 = keep the input, 1 = follow the prompt); neighbouring grid images are cross-faded.
+  const KEYS = [  // [t, α, β]
+    [0, 0, 0], [0.5, 0, 0],
+    [1.9, 1, 0], [2.4, 1, 0],     // appearance only: a golden robot in Spider-Man's exact pose
+    [3.8, 1, 1], [4.2, 1, 1],     // + structure: the robot takes its own shape
+    [5.6, 0, 1], [6.0, 0, 1],     // appearance back: Spider-Man, re-posed
+    [7.4, 0, 0], [7.8, 0, 0],     // structure back: the input again
+  ];
+  const name = (ai, si) => `../assets/cora/out_${(ai / 30).toFixed(2)}_${(si / 30).toFixed(2)}.jpg`;
+  const imgs = {};
+  let ctx;
+  const $ = id => document.getElementById(id);
+  const grid = (ai, si) => imgs[name(ai, si)];
+  const S = 178;
+
+  scene({
+    duration: 7.8,
+    async setup() {
+      const want = [];
+      for (let i = 0; i < 30; i++) for (const e of [0, 29]) want.push(name(i, e), name(e, i));
+      await Promise.all([...new Set(want)].map(async src => { imgs[src] = await A.load(src); }));
+      ctx = A.ctx($("out"));
+    },
+    render(t) {
+      const [alpha, beta] = A.keys(t, KEYS);
+      const fa = alpha * 29, fs = (1 - beta) * 29;   // the grid's second index stores 1 − β
+      ctx.clearRect(0, 0, S, S);
+      if (alpha < 1e-4 || alpha > 1 - 1e-4) {          // α parked at an end: β is the one moving
+        const ai = alpha > 0.5 ? 29 : 0, s0 = Math.floor(fs), s1 = Math.min(29, s0 + 1), k = fs - s0;
+        A.cover(ctx, grid(ai, s0), S, S);
+        if (k > 0.001) A.cover(ctx, grid(ai, s1), S, S, 0, 0, undefined, undefined, k);
+      } else {
+        const si = beta > 0.5 ? 0 : 29, a0 = Math.floor(fa), a1 = Math.min(29, a0 + 1), k = fa - a0;
+        A.cover(ctx, grid(a0, si), S, S);
+        if (k > 0.001) A.cover(ctx, grid(a1, si), S, S, 0, 0, undefined, undefined, k);
+      }
+      for (const [key, v] of [["alpha", alpha], ["beta", beta]]) {
+        $("v-" + key).textContent = v.toFixed(2);
+        $("f-" + key).style.width = (v * 100) + "%";
+        $("k-" + key).style.left = (v * 100) + "%";
+      }
+      // the prompt word each control pulls in lights up with it
+      $("w-app").style.color = A.mix("#9b9ba3", "#a6192e", alpha);
+      $("w-struct").style.color = A.mix("#9b9ba3", "#a6192e", beta);
+    },
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+/* Shared look for the paper animations: the site's "paper" palette on a 440×220 stage.
+
+   Every scene uses the same grid so the six read as one set:
+     labels      y 14 (an uppercase label sits 14px above each box)
+     boxes       y 28 → 206, 16px side margins
+     left zone   inputs y 28 → 126; a card y 150 → 206 (its label at y 136)
+     output      right-aligned, y 28 → 206 (178×178 when square), joined by one .link arrow
+*/
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=block");
+
+:root {
+  --bg: #fbfaf7;
+  --ink: #16161a;
+  --body: #3d3d44;
+  --muted: #6b6b73;
+  --faint: #9b9ba3;
+  --line: #e6e3dc;
+  --line-strong: #d6d2c9;
+  --accent: #a6192e;
+  --accent-soft: rgba(166, 25, 46, 0.07);
+}
+
+html, body { margin: 0; background: #e9e7e1; }
+body { min-height: 100vh; display: grid; place-items: center; }
+
+.stage {
+  position: relative;
+  width: 440px; height: 220px;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Geist", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* image boxes */
+.frame {
+  position: absolute;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #efede8;
+  box-shadow: 0 0 0 1px rgba(22, 22, 26, 0.08), 0 2px 8px rgba(22, 22, 26, 0.06);
+}
+.frame > img, .frame > canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* the label above every box; .out marks the result, .r right-aligns a counter or status */
+.ol {
+  position: absolute; height: 10px;
+  font-size: 8.5px; line-height: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); white-space: nowrap;
+}
+.ol.out { color: var(--accent); }
+.ol.r { text-align: right; color: var(--faint); font-variant-numeric: tabular-nums; }
+
+/* controls and text live in cards */
+.card {
+  position: absolute; box-sizing: border-box;
+  background: #fff; border: 1px solid var(--line); border-radius: 7px;
+  box-shadow: 0 1px 2px rgba(22, 22, 26, 0.04);
+}
+
+/* the one arrow from inputs to output */
+.link {
+  position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; box-sizing: border-box; z-index: 6;
+  display: grid; place-items: center;
+  border-radius: 50%; background: #fff; border: 1px solid var(--line-strong);
+  box-shadow: 0 1px 3px rgba(22, 22, 26, 0.08);
+}
+.link::before {
+  content: ""; width: 4.5px; height: 4.5px; margin-left: -2px;
+  border-top: 1.5px solid var(--muted); border-right: 1.5px solid var(--muted); transform: rotate(45deg);
+}
+
+/* small letter badge inside an image (A, A′, B …) */
+.badge {
+  position: absolute; left: 5px; top: 5px; z-index: 5;
+  min-width: 14px; height: 14px; padding: 0 4px; box-sizing: border-box; border-radius: 4px;
+  background: rgba(255, 255, 255, 0.92); box-shadow: 0 1px 2px rgba(22, 22, 26, 0.12);
+  font-size: 8.5px; line-height: 14px; font-weight: 600; text-align: center; color: var(--ink);
+}
+
+/* operators between inputs (+, :, ::) */
+.op {
+  position: absolute; transform: translate(-50%, -50%);
+  font-size: 13px; font-weight: 500; line-height: 1; color: var(--faint);
+}
