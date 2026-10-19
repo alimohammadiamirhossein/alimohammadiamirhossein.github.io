@@ -33,3 +33,11 @@ python tools/paper-anims/render.py         # or: render.py sia cora   (just some
 ```
 
 `render.py` also writes a 1320×660 MP4 and a GIF of each scene to `../paper-animations/`, for slides and social posts.
+
+### Loading on slow connections
+
+The page shows a light version first and upgrades itself: text appears at once (Geist loads without blocking,
+over a same-width fallback); each thumbnail starts as a tiny inline blur, then its poster; the animations
+(`<video data-src>`) are fetched whole by the script at the end of `index.html`, one at a time and on-screen
+first, and fade in only when they can play without stopping. On slow connections only on-screen animations
+are fetched; with Data Saver or reduced motion the posters stay. Analytics loads after the page.

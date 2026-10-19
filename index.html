@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7J6975QSS"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-S7J6975QSS');
+    // loaded after the page, so on a slow connection it never competes with what the visitor sees
+    addEventListener('load', function () {
+      var s = document.createElement('script'); s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-S7J6975QSS'; document.head.appendChild(s);
+    });
   </script>
 
   <title>Amir Alimohammadi</title>
@@ -44,8 +48,10 @@
   <link rel="icon" href="static/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="static/css/site.css?v=7">
+  <!-- the font never holds up the page: text shows at once in a same-width fallback, then Geist swaps in -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"></noscript>
+  <link rel="stylesheet" href="static/css/site.css?v=8">
 
   <script type="application/ld+json">
   {
@@ -170,8 +176,9 @@
     <h2>Publications <span class="note">* equal contribution</span></h2>
 
     <article class="pub" data-node="sia">
-      <a class="pub-thumb" href="https://selective-image-analogy.github.io/">
-        <video src="static/videos/sia.mp4" poster="static/images/pubs/sia.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="SIA teaser: one before/after pair with three edits; the user picks which edits transfer to a new image"></video>
+      <a class="pub-thumb" href="https://selective-image-analogy.github.io/" style="background-image:url(data:image/webp;base64,UklGRuwAAABXRUJQVlA4IOAAAAAwBgCdASooABQAPu1qqlAppiOiqqoBMB2JYwDECTNB+pU6S4XS/o4eYJqDH2hY/WPepa2ZoDy18RqAAP7h66nVaKtJvoXAAV50R/jom7Tf8sZOThzbi8hWbveYxqYn6sDbboOQdTFS1zQ/0T5R6bhG11qsZEmjELrWF5N2z/FtZzohXzv5Ia6CVm+QBznJs378wm6kADzU1/n1XbM/xYnetrS0wzI1Omx1c2fVU1fVLKQB3+2GUpQn3ZVOqD6hceVF1gbE6rX8yLpV0J7+uQ+jaGPEFoe0Nv6bqV46sAAAAA==)">
+        <img src="static/images/pubs/sia.webp" alt="SIA animation: a dragon demonstration pair and a query image; switching the lava, open-wings and gold edits on and off changes the output" width="720" height="360" loading="eager" decoding="async">
+        <video data-src="static/videos/sia.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">SIGGRAPH Asia 2026</p>
       <h3><a href="https://selective-image-analogy.github.io/">SIA: Selective Image Analogy</a></h3>
@@ -184,8 +191,9 @@
     </article>
 
     <article class="pub" data-node="hairport">
-      <a class="pub-thumb" href="https://deepmancer.github.io/HairPort/">
-        <video src="static/videos/hairport.mp4" poster="static/images/pubs/hairport.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="HairPort example: a face image and a hair reference combined into the face with the reference hairstyle"></video>
+      <a class="pub-thumb" href="https://deepmancer.github.io/HairPort/" style="background-image:url(data:image/webp;base64,UklGRvQAAABXRUJQVlA4IOgAAADwBgCdASooABQAPu1oq0+ppaOiKqoBMB2JQBg9rmIzrTSaA7kgQNlPonDY/a5vB6l1lw69nPQEapmbFLY7xCKAAP7YIqer9VnUZBeH3hXRZgPEqMDN6WuFzEZVgnK9rYGbsS5vabfNtCFyfphu+XN7sTL0V3kKtMiGZEhndUf+mskxRl6WD7qyepdLGexOzdBoQvrmu/LWmvBisb3A1JSRqbxRLddtgIScWlHS3zoetuoAXHq3YX84/4ZjIl7boqak/D4GT/1fu145RrO/xoeBjqoewjydenAO5Q/WGEb3YWPZHoDcAAAA)">
+        <img src="static/images/pubs/hairport.webp" alt="HairPort animation: a source portrait and a hair reference become the source with the reference hairstyle, stage by stage" width="720" height="360" loading="eager" decoding="async">
+        <video data-src="static/videos/hairport.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">SIGGRAPH 2026</p>
       <h3><a href="https://deepmancer.github.io/HairPort/">HairPort: Hair Import and Transfer from Single Images</a></h3>
@@ -199,8 +207,9 @@
     </article>
 
     <article class="pub" data-node="griffin">
-      <a class="pub-thumb" href="https://arxiv.org/abs/2509.23643">
-        <video src="static/videos/griffin.mp4" poster="static/images/pubs/griffin.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="Griffin example: a colour-coded layout and reference images for face, hair and sunglasses composed into one output photo"></video>
+      <a class="pub-thumb" href="https://arxiv.org/abs/2509.23643" style="background-image:url(data:image/webp;base64,UklGRtQAAABXRUJQVlA4IMgAAAAQBgCdASooABQAPtlUpE2oJKOiOrmYAQAbCUAYeaQAYBuRvRYteoYoKlm7Ok0d18iaD6Ta5w4cSgAA/uuxEqzaccs2POKfVghUoXCnDqFLyy6DvqcHJi/Zvb/LD2Ge07K8OxvFOCCrhg/lDXPy3Fw4Lu5OzZTKMq+jH+tqeKQVNPWpJimKzOD1UWfsC6CDli3sN1m3yIxPyASwt1eQMe77gF5ADLKtFUGM1izyTDOAduLgJxzWM9qXsSlhz1VaNTi46UL2AgAAAA==)">
+        <img src="static/images/pubs/griffin.webp" alt="Griffin animation: a colour-coded layout, reference images and a prompt composed into one output photo" width="720" height="360" loading="lazy" decoding="async">
+        <video data-src="static/videos/griffin.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">Preprint · arXiv</p>
       <h3><a href="https://arxiv.org/abs/2509.23643">Griffin: Generative Reference and Layout Guided Image Composition</a></h3>
@@ -212,8 +221,9 @@
     </article>
 
     <article class="pub" data-node="cora">
-      <a class="pub-thumb" href="https://cora-edit.github.io/">
-        <video src="static/videos/cora.mp4" poster="static/images/pubs/cora.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="Cora example: a sitting bear edited into a standing bear while keeping its appearance"></video>
+      <a class="pub-thumb" href="https://cora-edit.github.io/" style="background-image:url(data:image/webp;base64,UklGRswAAABXRUJQVlA4IMAAAAAQBgCdASooABQAPu1qqk6ppqOiMBqoATAdiWUAzcAWbQKFShbSNOn5PQ2ae7KnyctoSH7L0XpRLuAA/uHw4cLZ4M5bR+RW/0e4l1aWUa9KmDQHZZM2QIR+gbnltmrnPlr+tLjsf4ladh6S4EqNIwFEPhz+lB9ASfirubPvFsR9y4ydb5d5UYJj+jmA5vRpT91Xe+FJSXQ02Sg0pGzGDFGSYOeUeYOtbstwjWk9QnSQm/dpealTiHH2warOPHcAAAA=)">
+        <img src="static/images/pubs/cora.webp" alt="Cora animation: Spider-Man edited into a golden robot as the appearance and structure sliders change" width="720" height="360" loading="lazy" decoding="async">
+        <video data-src="static/videos/cora.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">SIGGRAPH 2025</p>
       <h3><a href="https://cora-edit.github.io/">Cora: Correspondence-aware Image Editing Using Few-Step Diffusion</a></h3>
@@ -227,8 +237,9 @@
     </article>
 
     <article class="pub" data-node="smite">
-      <a class="pub-thumb" href="https://segment-me-in-time.github.io/">
-        <video src="static/videos/smite.mp4" poster="static/images/pubs/smite.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="SMITE example: a face video frame and its fine-grained part segmentation"></video>
+      <a class="pub-thumb" href="https://segment-me-in-time.github.io/" style="background-image:url(data:image/webp;base64,UklGRvAAAABXRUJQVlA4IOQAAAAwBgCdASooABQAPu1uslKppiSipWmZMB2JQBdggQAOT9vqnxm7pD3arVantZCgGnzNyQu8cvQQMMAAAP7h8OHKdT8++cLbo8fCXK0ezpQ9c3fFULYOT+aK0BQvuNbg/NhxJO79uRtFmOEcrreAzsMPhhIUOiwot6KIKum56peZVOPKZlLr1mF5a1dcV32P+p23pjWWe4s290V08EWEN7xwTKS+/BWWZ5KRy5pq8Mv2Z729SVupWKPtB3O/ezrswpXnVaxNkOsWEO1NuEpOvfvxanul0CE4Nf5d2AU6E/RD/AAAAAA=)">
+        <img src="static/images/pubs/smite.webp" alt="SMITE animation: a face video segmented into parts, quadrants or bands, consistent across the clip" width="720" height="360" loading="lazy" decoding="async">
+        <video data-src="static/videos/smite.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">ICLR 2025</p>
       <h3><a href="https://segment-me-in-time.github.io/">SMITE: Segment Me In TimE</a></h3>
@@ -242,8 +253,9 @@
     </article>
 
     <article class="pub" data-node="pose">
-      <a class="pub-thumb" href="https://arxiv.org/abs/2304.06707">
-        <video src="static/videos/pose.mp4" poster="static/images/pubs/pose.webp" muted loop playsinline preload="none" width="720" height="360" aria-label="A pedestrian on a crosswalk with forecast future skeleton poses"></video>
+      <a class="pub-thumb" href="https://arxiv.org/abs/2304.06707" style="background-image:url(data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAAAQBgCdASooABQAPulgpk2pJaOiNVQMASAdCWUAy2g5X9w/bO8z/B9Z/wJDTYOPT+irw7Wgh7bknagA/vJv8e44NSTr2Pii7/G6GIjXlUDX4klUzLCVWEFCJycCvJdQMT9hTplMoWaszsxAN8xaK/SwQzyKyhUpmI9GpCHYvBQZuqSmqjvP6V3/n9MF2gyR7dE6WXuAhHSQYrDW65i82/bPWfCAAA==)">
+        <img src="static/images/pubs/pose.webp" alt="Pose forecasting animation: observed pedestrian poses, then forecast poses next to the ground truth" width="720" height="360" loading="lazy" decoding="async">
+        <video data-src="static/videos/pose.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </a>
       <p class="venue">RA-L 2024</p>
       <h3><a href="https://arxiv.org/abs/2304.06707">Toward Reliable Human Pose Forecasting with Uncertainty</a></h3>
@@ -266,20 +278,50 @@
 
 </div>
 
-<script src="static/js/constellation.js?v=5" defer></script>
+<script src="static/js/constellation.js?v=6" defer></script>
 <script>
   document.querySelector(".avatar").addEventListener("click", function () { this.classList.toggle("smiling"); });
-  // Paper animations: play only while on screen, and not at all for visitors who prefer reduced motion.
+  // Paper animations, loaded gently: the page (text, images, map) comes first; then each animation is
+  // downloaded whole, one at a time (on-screen ones first), and fades in over its poster only once it
+  // can play without stopping. Visitors with Data Saver or reduced motion keep the still posters.
   (function () {
-    var vids = document.querySelectorAll(".pub-thumb video");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    var vids = [].slice.call(document.querySelectorAll(".pub-thumb video[data-src]"));
+    var conn = navigator.connection || {};
+    if (!vids.length || conn.saveData || !window.fetch || !("IntersectionObserver" in window) ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var onScreen = new Set(), started = false, busy = false;
+    function play(v) { var p = v.play(); if (p) p.catch(function () {}); }
+    // on a slow connection only what is on screen is fetched; otherwise the rest follows in the background
+    var slow = /(^|-)2g|3g/.test(conn.effectiveType || "");
+    function next() {
+      var waiting = vids.filter(function (v) { return !v.dataset.state; });
+      return waiting.filter(function (v) { return onScreen.has(v); })[0] || (slow ? null : waiting[0]);
+    }
+    function pump() {
+      if (!started || busy) return;
+      var v = next();
+      if (!v) return;
+      busy = true; v.dataset.state = "loading";
+      fetch(v.dataset.src)
+        .then(function (r) { if (!r.ok) throw r; return r.blob(); })
+        .then(function (b) { v.src = URL.createObjectURL(b); })
+        .catch(function () { v.src = v.dataset.src; })          // fall back to plain streaming
+        .then(function () { v.dataset.state = "ready"; busy = false; if (onScreen.has(v)) play(v); pump(); });
+    }
+    vids.forEach(function (v) {
+      v.addEventListener("playing", function () { v.classList.add("on"); });
+    });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { var p = e.target.play(); if (p) p.catch(function () {}); }
-        else e.target.pause();
+        var v = e.target;
+        if (e.isIntersecting) { onScreen.add(v); if (v.dataset.state === "ready") play(v); else pump(); }
+        else { onScreen.delete(v); v.pause(); }
       });
     }, { threshold: 0.25 });
     vids.forEach(function (v) { io.observe(v); });
+    function start() { started = true; pump(); }
+    if (document.readyState === "complete") setTimeout(start, 200);
+    else addEventListener("load", function () { setTimeout(start, 200); });
   })();
 </script>
 <script>

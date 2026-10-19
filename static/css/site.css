@@ -1,3 +1,6 @@
+/* Until Geist arrives, text uses a local font of the same width, so nothing jumps when it swaps in. */
+@font-face { font-family: "Geist Fallback"; src: local("Arial"), local("Helvetica Neue"), local("Helvetica"), local("Roboto"); size-adjust: 100%; }
+
 /* ─── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
   --bg: #f4f3ef;          /* warm paper */
@@ -31,7 +34,7 @@
   --shadow: 0 1px 2px rgba(22, 22, 26, 0.04), 0 10px 30px rgba(22, 22, 26, 0.06);
   --shadow-lg: 0 2px 6px rgba(22, 22, 26, 0.06), 0 20px 48px rgba(22, 22, 26, 0.14);
 
-  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Geist", "Geist Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --gap: 16px;
 }
 
@@ -93,7 +96,7 @@ p { margin: 0; }
 /* ─── Layout: three panels around the map, like the original site ────────── */
 .stage {
   display: grid;
-  grid-template-columns: minmax(300px, 360px) 1fr minmax(330px, 400px);
+  grid-template-columns: clamp(280px, 25vw, 360px) minmax(360px, 1fr) clamp(300px, 28vw, 400px);
   grid-template-areas: "left map right";
   gap: var(--gap);
   height: 100vh;
@@ -161,7 +164,7 @@ html.is-dark { color-scheme: dark; }
 .about h1 {
   padding-right: 44px;   /* room for the theme toggle */
   font-weight: 600;
-  font-size: 2.45rem;
+  font-size: clamp(2.05rem, 2.6vw, 2.45rem);
   line-height: 1.05;
   letter-spacing: -0.035em;
   margin: 0 0 10px;
@@ -224,9 +227,14 @@ html.is-dark { color-scheme: dark; }
 .pub-thumb {
   position: relative; display: block;
   border-radius: 8px; overflow: hidden; aspect-ratio: 2 / 1; margin-bottom: 10px;
-  background: #fff; box-shadow: 0 0 0 1px var(--line);
+  background: #fbfaf7 center / cover no-repeat; box-shadow: 0 0 0 1px var(--line);
 }
-.pub-thumb img, .pub-thumb video { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
+.pub-thumb img, .pub-thumb video {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover;
+  transition: transform 400ms ease, opacity 500ms ease;
+}
+.pub-thumb video { opacity: 0; }
+.pub-thumb video.on { opacity: 1; }
 .pub:hover .pub-thumb img, .pub:hover .pub-thumb video { transform: scale(1.02); }
 .venue {
   margin: 0 0 3px;
@@ -289,6 +297,8 @@ html.is-dark { color-scheme: dark; }
 .node .disc { transition: transform 260ms cubic-bezier(.3,1.6,.5,1); transform-box: fill-box; transform-origin: center; }
 .node:hover .disc, .node:focus-visible .disc, .node.lit .disc { transform: scale(1.1); }
 .node .face { fill: #fff; }
+.node image:not(.alt) { transition: opacity 350ms ease; }
+.node image.pending:not(.alt) { opacity: 0; }
 .node.util .face { fill: var(--face); }
 .node.root .face { fill: var(--portrait-bg); }
 .node.root .alt { opacity: 0; transition: opacity 280ms ease; }
@@ -354,7 +364,7 @@ html.is-dark { color-scheme: dark; }
 @media (hover: none) { .hint .on-mouse { display: none; } .hint .on-touch { display: inline; } }
 
 /* ─── Small screens: one scrolling column ────────────────────────────────── */
-@media (max-width: 1100px) {
+@media (max-width: 1000px) {
   html, body { height: auto; }
   body { overflow: auto; }
   .stage {

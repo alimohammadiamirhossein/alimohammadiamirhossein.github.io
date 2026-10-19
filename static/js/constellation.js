@@ -139,7 +139,11 @@
     if (n.img) {
       const clip = el("clipPath", { id: "clip-" + n.id }, disc);
       n.clip = el("circle", {}, clip);
-      n.image = el("image", { href: n.img, "clip-path": `url(#clip-${n.id})`, preserveAspectRatio: "xMidYMid slice" }, disc);
+      n.image = el("image", { href: n.img, "clip-path": `url(#clip-${n.id})`, preserveAspectRatio: "xMidYMid slice", class: "pending" }, disc);
+      // fade in when it arrives (slow connections); never stay hidden if the event is missed
+      const shown = () => n.image.classList.remove("pending");
+      n.image.addEventListener("load", shown); n.image.addEventListener("error", shown);
+      window.addEventListener("load", () => setTimeout(shown, 400));
       // a second picture that fades in on hover (the portrait smiles back)
       if (n.hoverImg) n.imageAlt = el("image", { class: "alt", href: n.hoverImg, "clip-path": `url(#clip-${n.id})`, preserveAspectRatio: "xMidYMid slice" }, disc);
     } else if (n.glyph) {
