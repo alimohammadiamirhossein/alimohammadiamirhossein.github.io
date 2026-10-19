@@ -41,3 +41,10 @@ over a same-width fallback); each thumbnail starts as a tiny inline blur, then i
 (`<video data-src>`) are fetched whole by the script at the end of `index.html`, one at a time and on-screen
 first, and fade in only when they can play without stopping. On slow connections only on-screen animations
 are fetched; with Data Saver or reduced motion the posters stay. Analytics loads after the page.
+
+### Portrait hover
+
+The two portraits' outlines don't line up exactly, so instead of a plain crossfade the neutral photo is warped
+toward the smiling one's shape while the smile fades in (`static/js/portrait-morph.js`, an SVG displacement
+filter). Both ends are the untouched photos. If either photo changes, regenerate the two displacement maps with
+`python tools/portrait/flow.py`.

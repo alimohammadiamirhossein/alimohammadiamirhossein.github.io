@@ -51,7 +51,7 @@
   <!-- the font never holds up the page: text shows at once in a same-width fallback, then Geist swaps in -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"></noscript>
-  <link rel="stylesheet" href="static/css/site.css?v=8">
+  <link rel="stylesheet" href="static/css/site.css?v=9">
 
   <script type="application/ld+json">
   {
@@ -84,8 +84,10 @@
       </button>
       <!-- on phones the map is hidden, so the portrait moves here; tap it and it smiles -->
       <button class="avatar" type="button" aria-label="Portrait of Amir Alimohammadi">
-        <img src="static/images/nodes/portrait.webp" alt="" width="480" height="480" loading="lazy">
-        <img class="smile" src="static/images/nodes/portrait-smile.webp" alt="" width="480" height="480" loading="lazy">
+        <svg viewBox="0 0 480 480" aria-hidden="true">
+          <image href="static/images/nodes/portrait.webp" x="0" y="0" width="480" height="480"/>
+          <image class="smile" href="static/images/nodes/portrait-smile.webp" x="0" y="0" width="480" height="480"/>
+        </svg>
       </button>
       <h1>Amir <em>Alimohammadi</em></h1>
       <p class="role">Ph.D. Candidate, Computing Science<br><a href="https://gruvi.cs.sfu.ca/">GrUVi Lab</a>, Simon Fraser University</p>
@@ -278,9 +280,14 @@
 
 </div>
 
-<script src="static/js/constellation.js?v=6" defer></script>
+<script src="static/js/portrait-morph.js?v=2"></script>
+<script src="static/js/constellation.js?v=7" defer></script>
 <script>
-  document.querySelector(".avatar").addEventListener("click", function () { this.classList.toggle("smiling"); });
+  (function () {   // the phone avatar: tap and it smiles
+    var av = document.querySelector(".avatar"), im = av.querySelectorAll("image");
+    var m = window.portraitMorph && portraitMorph(im[0], im[1]);
+    av.addEventListener("click", function () { if (m) av.setAttribute("aria-pressed", m.toggle() ? "true" : "false"); });
+  })();
   // Paper animations, loaded gently: the page (text, images, map) comes first; then each animation is
   // downloaded whole, one at a time (on-screen ones first), and fades in over its poster only once it
   // can play without stopping. Visitors with Data Saver or reduced motion keep the still posters.

@@ -156,11 +156,8 @@ html.is-dark { color-scheme: dark; }
   background: var(--portrait-bg); box-shadow: 0 0 0 3px var(--root-ring), var(--shadow);
   -webkit-tap-highlight-color: transparent;
 }
-.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; }
-.avatar .smile { opacity: 0; transition: opacity 280ms ease; }
-.avatar.smiling .smile { opacity: 1; }
-.avatar img:not(.smile) { transition: opacity 0s; }
-.avatar.smiling img:not(.smile) { opacity: 0; transition: opacity 0s 280ms; }   /* see .node.root .alt */
+.avatar svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.avatar .smile { opacity: 0; }    /* tap: the portrait morphs into its smile (static/js/portrait-morph.js) */
 .about h1 {
   padding-right: 44px;   /* room for the theme toggle */
   font-weight: 600;
@@ -301,12 +298,7 @@ html.is-dark { color-scheme: dark; }
 .node image.pending:not(.alt) { opacity: 0; }
 .node.util .face { fill: var(--face); }
 .node.root .face { fill: var(--portrait-bg); }
-.node.root .alt { opacity: 0; transition: opacity 280ms ease; }
-.node.root:hover .alt, .node.root:focus-visible .alt { opacity: 1; }
-/* the cut-outs' shoulders differ slightly, so drop the neutral one once the smile is fully in
-   (and bring it back instantly on the way out) or its edge peeks through as a line */
-.node.root image:not(.alt) { transition: opacity 0s; }
-.node.root:hover image:not(.alt), .node.root:focus-visible image:not(.alt) { opacity: 0; transition: opacity 0s 280ms; }
+.node.root .alt { opacity: 0; }   /* the hover smile is driven by static/js/portrait-morph.js */
 .node .ring { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
 .node.paper .ring { stroke: var(--paper-ring); stroke-width: 1.5; }
 .node.award .ring { stroke: var(--line-strong); }

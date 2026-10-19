@@ -144,8 +144,11 @@
       const shown = () => n.image.classList.remove("pending");
       n.image.addEventListener("load", shown); n.image.addEventListener("error", shown);
       window.addEventListener("load", () => setTimeout(shown, 400));
-      // a second picture that fades in on hover (the portrait smiles back)
-      if (n.hoverImg) n.imageAlt = el("image", { class: "alt", href: n.hoverImg, "clip-path": `url(#clip-${n.id})`, preserveAspectRatio: "xMidYMid slice" }, disc);
+      // a second picture the portrait morphs into on hover: it smiles back (static/js/portrait-morph.js)
+      if (n.hoverImg) {
+        n.imageAlt = el("image", { class: "alt", href: n.hoverImg, "clip-path": `url(#clip-${n.id})`, preserveAspectRatio: "xMidYMid slice" }, disc);
+        if (window.portraitMorph) n.morph = portraitMorph(n.image, n.imageAlt);
+      }
     } else if (n.glyph) {
       n.text = el("text", { class: "glyph", "text-anchor": "middle", "dominant-baseline": "central" }, disc);
       n.text.textContent = n.glyph;
@@ -392,10 +395,18 @@
   let press = null;   // { n, start, grab, lastPos, lastT, moved }
 
   NODES.forEach(n => {
-    n.g.addEventListener("pointerenter", e => { if (e.pointerType === "mouse" && !dragged && n.card) { pinned = false; activate(n.id); } });
-    n.g.addEventListener("pointerleave", e => { if (e.pointerType === "mouse" && !dragged) deactivate(); });
-    n.g.addEventListener("focus", () => { if (n.card) activate(n.id); });
-    n.g.addEventListener("blur", () => deactivate());
+    n.g.addEventListener("pointerenter", e => {
+      if (e.pointerType !== "mouse") return;
+      if (n.morph) n.morph.set(1);
+      if (!dragged && n.card) { pinned = false; activate(n.id); }
+    });
+    n.g.addEventListener("pointerleave", e => {
+      if (e.pointerType !== "mouse") return;
+      if (n.morph) n.morph.set(0);
+      if (!dragged) deactivate();
+    });
+    n.g.addEventListener("focus", () => { if (n.morph) n.morph.set(1); if (n.card) activate(n.id); });
+    n.g.addEventListener("blur", () => { if (n.morph) n.morph.set(0); deactivate(); });
 
     n.g.addEventListener("pointerdown", e => {
       if (e.button !== 0) return;
@@ -432,7 +443,10 @@
       if (e.type !== "pointerup") return;
       if (n.href) { window.open(n.href, /^https?:/.test(n.href) ? "_blank" : "_self"); return; }
       if (n.card) { pinned = true; activate(n.id); }
-      else ripple(n.x, n.y, 1.2);     // the portrait: a tap sends a ripple
+      else {                          // the portrait: a tap sends a ripple (and, on touch, toggles the smile)
+        ripple(n.x, n.y, 1.2);
+        if (n.morph && e.pointerType !== "mouse") n.morph.toggle();
+      }
     };
     n.g.addEventListener("pointerup", release);
     n.g.addEventListener("pointercancel", release);
